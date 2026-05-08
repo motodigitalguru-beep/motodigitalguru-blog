@@ -1,0 +1,40 @@
+---
+const { current = "" } = Astro.props as { current?: "home" | "writing" | "about" };
+---
+
+<header class="border-b border-zinc-900">
+  <div class="mx-auto max-w-3xl px-6 py-6 flex items-center justify-between">
+    <a href="/" class="font-mono text-sm text-zinc-300 hover:text-zinc-100 transition flex items-center gap-2">
+      <span class="inline-block w-2 h-2 rounded-full bg-accent"></span>
+      <span>motodigitalguru</span>
+    </a>
+
+    <nav class="flex items-center gap-5 font-mono text-xs">
+      <a
+        href="/"
+        class:list={[
+          "transition",
+          current === "home" ? "text-zinc-100" : "text-zinc-500 hover:text-zinc-300",
+        ]}
+      >
+        writing
+      </a>
+      <a
+        href="/about"
+        class:list={[
+          "transition",
+          current === "about" ? "text-zinc-100" : "text-zinc-500 hover:text-zinc-300",
+        ]}
+      >
+        about
+      </a>
+      <a
+        href="/rss.xml"
+        class="text-zinc-500 hover:text-zinc-300 transition"
+        aria-label="RSS feed"
+      >
+        rss
+      </a>
+    </nav>
+  </div>
+</header>

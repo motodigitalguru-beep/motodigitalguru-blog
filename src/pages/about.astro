@@ -1,0 +1,69 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const title = "About — motodigitalguru";
+const description = "Who's writing here, and why.";
+---
+
+<BaseLayout title={title} description={description}>
+  <Header current="about" />
+
+  <main class="mx-auto max-w-3xl px-6 py-16 sm:py-24">
+    <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-100 mb-12">
+      About
+    </h1>
+
+    <div class="prose prose-invert max-w-none">
+      <p class="text-lg leading-relaxed text-zinc-300">
+        I'm Marcel — known online as <strong class="text-zinc-100">motodigitalguru</strong>.
+        I run a one-person consulting practice based out of Düsseldorf and
+        spend most of my working time on the question: <em>how does
+        engineering actually look when one human and a capable AI ship things
+        together?</em>
+      </p>
+
+      <h2 class="mt-12 text-xl text-zinc-100">What I write about</h2>
+      <ul class="text-zinc-400">
+        <li>Build logs from real projects (small B2B, marketplace prototypes, internal tools)</li>
+        <li>Diagnoses — what AI tools get wrong and how to design around it</li>
+        <li>System thinking without code: the part that doesn't go away with better models</li>
+        <li>Strategic decisions: when to automate, when to override, when to ship</li>
+      </ul>
+
+      <h2 class="mt-12 text-xl text-zinc-100">What I make</h2>
+      <ul class="text-zinc-400">
+        <li>
+          <a href="https://www.flow-code-labs.io" target="_blank" rel="noreferrer noopener">
+            Blueprint
+          </a>{" "}
+          — a Claude Code skill that produces a module-oriented plan before
+          any implementation code is written.
+        </li>
+        <li>Custom blueprints for clients who want AI-driven engineering inside their existing teams.</li>
+        <li>
+          A few personal projects you'll hear about as they go live (Shepperwoki,
+          aaios, others).
+        </li>
+      </ul>
+
+      <h2 class="mt-12 text-xl text-zinc-100">Get in touch</h2>
+      <p class="text-zinc-400">
+        Email me at{" "}
+        <a href="mailto:kontakt@flow-code-labs.io" class="text-accent">
+          kontakt@flow-code-labs.io
+        </a>{" "}
+        — for project work, conversations, or to tell me I'm wrong about
+        something. All three are welcome.
+      </p>
+
+      <p class="mt-8 text-sm text-zinc-500 italic">
+        English isn't my native language — I write here partly to think,
+        partly to get better at it.
+      </p>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

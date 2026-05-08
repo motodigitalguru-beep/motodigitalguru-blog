@@ -1,0 +1,51 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import PostCard from "../components/PostCard.astro";
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+);
+
+const title = "motodigitalguru — AI-driven engineering for solo operators";
+const description =
+  "Notes from building real things with AI as the co-pilot. Architecture, diagnoses, things AI got wrong, things I had to override.";
+---
+
+<BaseLayout title={title} description={description}>
+  <Header current="home" />
+
+  <main class="mx-auto max-w-3xl px-6">
+    <!-- Intro -->
+    <section class="py-16 sm:py-24 border-b border-zinc-900">
+      <h1 class="text-3xl sm:text-5xl font-semibold tracking-tight leading-[1.1] text-zinc-100 mb-6">
+        AI-driven engineering for<br />
+        <span class="text-accent">solo operators &amp; small teams.</span>
+      </h1>
+      <p class="text-lg text-zinc-400 leading-relaxed max-w-2xl">
+        Build logs and field notes from solo and small-team projects where
+        AI does the heavy lifting and a single human stays in the loop —
+        diagnosing, deciding, vetoing.
+      </p>
+      <p class="mt-6 text-sm text-zinc-500 leading-relaxed max-w-2xl">
+        I'm not a developer. I make tools and systems work, mostly with
+        Claude Code and the right amount of stubbornness.
+      </p>
+    </section>
+
+    <!-- Posts -->
+    <section class="pt-8">
+      {posts.length === 0 ? (
+        <p class="py-16 text-center text-zinc-500 font-mono text-sm">
+          First post coming soon.
+        </p>
+      ) : (
+        posts.map((post) => <PostCard post={post} />)
+      )}
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

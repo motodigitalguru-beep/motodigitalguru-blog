@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-ink text-zinc-300;
+    font-feature-settings: "ss01", "cv11";
+  }
+  body {
+    @apply min-h-screen antialiased;
+  }
+  ::selection {
+    @apply bg-accent/30 text-zinc-100;
+  }
+}
