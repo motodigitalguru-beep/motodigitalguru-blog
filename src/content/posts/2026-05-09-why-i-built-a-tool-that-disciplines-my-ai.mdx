@@ -1,0 +1,77 @@
+---
+title: "Why I built a tool that disciplines my AI"
+description: "I'm not a developer. But I diagnosed a pattern in how AI tools fail on non-trivial projects, and shipped a tool that fixes it."
+publishedAt: 2026-05-09
+tags: ["build-log", "blueprint", "ai-engineering"]
+draft: false
+---
+
+> I'm not a developer. I diagnosed a pattern.
+
+If you've used Claude Code, Cursor, or any of the agentic AI tools for non-trivial projects, you've probably seen this:
+
+You give the AI a goal. *"Build a habit tracker."* It dives in. Three modules in, things start to misalign. The auth module's `User` type doesn't match the profile module's `User` type. Two functions with nearly the same name and subtly different behavior coexist. The deletion flow you didn't think to mention is now wedged into the auth module instead of being its own thing.
+
+You spend the next day refactoring. Or the AI does — and breaks four other things in the process.
+
+I kept seeing this pattern in every AI-built project I touched. And I started realizing: it's not Claude's fault. It's the **workflow's** fault.
+
+## What's actually happening
+
+The AI is good at one thing: it writes code that does the thing you just asked. Each prompt is a one-shot. No overall plan. No interface contracts. No *"this module gives X, that module expects Y."* The AI improvises every interface, every type, every assumption — fresh, every time.
+
+Three modules in, the assumptions stop being compatible.
+
+Add to that: in the AI's working memory, GDPR doesn't exist unless you mention it. Hosting policies don't exist. Stripe doesn't refuse certain content categories. The 30 % Apple cut on iOS in-app purchases doesn't surface. All those constraints — which an experienced architect would raise at the design stage — never come up. Until they break the project in week four.
+
+I am not a developer. But I've been looking at systems for fifteen years. And the diagnosis was clear: the AI is missing the thing human teams call **architecture**.
+
+## So I built it
+
+It's a Claude Code skill called **Blueprint**. You run `/blueprint` in your project directory before any code is written.
+
+It walks you through:
+
+- **Platform first** (web / mobile-cross / desktop / cli / bot — because it changes everything else, and most people skip the question)
+- **Awareness triggers** (adult content? user data? minors? regulated industry?)
+- **Modules**, each with a contract: *what it gives to the outside, what it expects from the outside*
+- **Database structure** with named indexes, relations, soft-delete policies
+- **Security per module**, mapped to OWASP categories
+- **Risk register**, including the hidden constraints — hosting, payment, advertising, GDPR
+- **Cost and time** estimates at module level
+
+Then it **locks** the concept. Two automated validators run: one against a JSON schema, one for cross-layer consistency (every module mentioned in the graph has a file, has a JSON entry, has a position in the build order — no phantom modules).
+
+Only after lock does Claude get to write implementation code. And when it does, the contracts are in front of it. It doesn't improvise.
+
+## The first real test
+
+Was a pivot.
+
+I had written a complete blueprint for a **B2C habit tracker** — single user, tracks their own habits, lifetime license.
+
+Then I changed my mind: *"actually, this is for coaches who track their clients."*
+
+That changes everything. New roles, new database tables, GDPR joint-controller question, mandatory 2FA for coaches because account hijacks are now multi-client data leaks, row-level security in Postgres, privacy toggles per habit because clients can't be forced to share everything with their coach.
+
+The skill let me update **twelve files in one shot**. Vision, architecture, database structure, four existing modules updated, one new module (coaching), security with OWASP-per-module updated, compliance with the joint-controller analysis, risks (five new high-priority ones added — including the legal question I now know I have to ask a lawyer about), tasks.
+
+Both validators ran green at the end.
+
+Five hours, end to end. In a regular team — two engineers and an architect — that's a one-week meeting marathon.
+
+## Why I think this matters
+
+Here's the part that, for me, matters more than the tool itself.
+
+I am not a developer. I would have struggled to write the code that the skill orchestrates. But I diagnosed the pattern, designed the workflow, decided the trade-offs. Claude wrote the code. We shipped a v1.0 to GitHub.
+
+That split — diagnosis and design from the human, implementation from the AI — used to be exotic. With agentic AI as the co-pilot, I think it's becoming a standard mode of operating for solo founders and small teams.
+
+The skill that fixes AI's improvisation problem was itself made by an AI. Diagnosed by a non-developer. That's the loop that just clicked into place for me.
+
+---
+
+Open source, MIT. Code on GitHub: [github.com/motodigitalguru-beep/blueprint](https://github.com/motodigitalguru-beep/blueprint)
+
+If you try it on something real, I'd like to hear what broke.
