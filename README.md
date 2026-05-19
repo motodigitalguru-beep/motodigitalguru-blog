@@ -1,6 +1,6 @@
 # motodigitalguru-blog
 
-Personal blog of Marcel Reitz (motodigitalguru) — *AI-driven engineering for solo operators and small teams.*
+Personal blog of CARSTEN WEBER (motodigitalguru) — *AI-driven engineering for solo operators and small teams.*
 
 Live at: [motodigitalguru.com](https://motodigitalguru.com) (once DNS is pointed at Vercel)
 
